@@ -1,0 +1,30 @@
+1. Why 16 threads did not run twice as fast as 8 threads on an 8-core CPU
+Shared Execution Pipelines: An 8-core CPU has only 8 physical compute cores. Running 16 threads relies on Simultaneous Multithreading which provides logical thread contexts that share the same physical execution units rather than duplicating them.
+Compute Saturation: Because the Monte Carlo loop is entirely compute-bound, the physical execution ports are already saturated at 8 threads. SMT threads cannot double throughput because there are no idle functional units left to exploit.
+
+2. Why the synchronized version in Part 2 was slower than a single core
+Critical Section Serialization: Requiring threads to acquire a mutual exclusion lock on every loop iteration serializes execution, eliminating concurrency.
+Lock Overhead & Bus Contention: Cores spend the vast majority of their clock cycles arbitrating lock access, stalling on memory bus locks, and incurring OS kernel context switches. A single-threaded loop modifies its accumulator directly in local registers/cache with zero synchronization penalty.
+
+
+results of execution
+python part1_phantom_bug.py
+Run 1: Hits = 39,269,265 | Pi Approx = 3.14154 | Time = 13.43s
+Run 2: Hits = 39,265,042 | Pi Approx = 3.14120 | Time = 6.52s
+Run 3: Hits = 39,267,558 | Pi Approx = 3.14140 | Time = 6.60s
+Run 4: Hits = 39,268,042 | Pi Approx = 3.14144 | Time = 6.59s
+Run 5: Hits = 39,265,064 | Pi Approx = 3.14121 | Time = 6.51s
+
+python part2_synchronization_trap.py
+Single-Threaded:  Pi = 3.14137 | Time = 0.547s
+Synchronized (4T): Pi = 3.14085 | Time = 0.937s
+Slowdown Penalty: 1.71x
+
+python part3_openMP.py
+Benchmarking 100,000,000 Iterations...
+T= 1 | Runtime: 11123.49 ms | Speedup:  1.00x | Efficiency: 100.0%
+T= 2 | Runtime:  5541.67 ms | Speedup:  2.01x | Efficiency: 100.4%
+T= 4 | Runtime:  2877.21 ms | Speedup:  3.87x | Efficiency:  96.7%
+T= 8 | Runtime:  2024.32 ms | Speedup:  5.49x | Efficiency:  68.7%
+T=16 | Runtime:  1824.17 ms | Speedup:  6.10x | Efficiency:  38.1%
+T=32 | Runtime:  1785.05 ms | Speedup:  6.23x | Efficiency:  19.5%

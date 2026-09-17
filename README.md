@@ -1,2 +1,2 @@
 Student ID 230103278
-Group 02N 08-P
+Group 02N 06-P

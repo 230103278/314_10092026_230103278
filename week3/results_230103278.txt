@@ -1,0 +1,162 @@
+ADVANCED PARALLEL PROGRAMMING & ARCHITECTURE - BARE-METAL EXECUTION LOG
+Student ID: 230103278
+Timestamp: Thu Sep 17 07:50:38 AM UTC 2026
+
+======================================================================
+HARDWARE METADATA: CPU & CACHE ARCHITECTURE
+COMMAND: lscpu
+======================================================================
+Architecture:                            x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           48 bits physical, 48 bits virtual
+Byte Order:                              Little Endian
+CPU(s):                                  12
+On-line CPU(s) list:                     0-11
+Vendor ID:                               AuthenticAMD
+Model name:                              AMD Ryzen 5 8645HS w/ Radeon 760M Graphics
+CPU family:                              25
+Model:                                   117
+Thread(s) per core:                      2
+Core(s) per socket:                      6
+Socket(s):                               1
+Stepping:                                2
+Microcode version:                       0xa70520a
+Frequency boost:                         enabled
+CPU(s) scaling MHz:                      32%
+CPU max MHz:                             4301.0000
+CPU min MHz:                             409.6200
+BogoMIPS:                                8583.86
+Flags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good amd_lbr_v2 nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpuid_fault cpb cat_l3 cdp_l3 hw_pstate ssbd mba perfmon_v2 ibrs ibpb stibp ibrs_enhanced vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk avx512_bf16 clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold vgif x2avic v_spec_ctrl vnmi avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor smca fsrm flush_l1d amd_lbr_pmc_freeze
+Virtualization:                          AMD-V
+L1d cache:                               192 KiB (6 instances)
+L1i cache:                               192 KiB (6 instances)
+L2 cache:                                6 MiB (6 instances)
+L3 cache:                                16 MiB (1 instance)
+NUMA node(s):                            1
+NUMA node0 CPU(s):                       0-11
+Vulnerability Gather data sampling:      Not affected
+Vulnerability Ghostwrite:                Not affected
+Vulnerability Indirect target selection: Not affected
+Vulnerability Itlb multihit:             Not affected
+Vulnerability L1tf:                      Not affected
+Vulnerability Mds:                       Not affected
+Vulnerability Meltdown:                  Not affected
+Vulnerability Mmio stale data:           Not affected
+Vulnerability Old microcode:             Not affected
+Vulnerability Reg file data sampling:    Not affected
+Vulnerability Retbleed:                  Not affected
+Vulnerability Spec rstack overflow:      Mitigation; Safe RET
+Vulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:                Mitigation; Enhanced / Automatic IBRS; IBPB conditional; STIBP always-on; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                     Not affected
+Vulnerability Tsa:                       Mitigation; Clear CPU buffers
+Vulnerability Tsx async abort:           Not affected
+Vulnerability Vmscape:                   Mitigation; IBPB before exit to userspace
+
+======================================================================
+HARDWARE METADATA: CACHE GEOMETRY
+COMMAND: lscpu -C
+======================================================================
+NAME ONE-SIZE ALL-SIZE WAYS TYPE        LEVEL  SETS PHY-LINE COHERENCY-SIZE
+L1d       32K     192K    8 Data            1    64        1             64
+L1i       32K     192K    8 Instruction     1    64        1             64
+L2         1M       6M    8 Unified         2  2048        1             64
+L3        16M      16M   16 Unified         3 16384        1             64
+
+======================================================================
+HARDWARE METADATA: OS & KERNEL & PYTHON
+COMMAND: uname -a && python3 --version
+======================================================================
+Linux archpc 7.2.4-arch1-2 #1 SMP PREEMPT_DYNAMIC Tue, 08 Sep 2026 10:22:31 +0000 x86_64 GNU/Linux
+Python 3.14.7
+
+======================================================================
+TASK 1: AMDAHL'S LAW & PHYSICAL SILICON SATURATION
+COMMAND: python3 task1_amdahl.py
+======================================================================
+OS Reported Logical Cores: 12
+Single Process Baseline Time T(1): 5.5374s
+
+Cores | Time(s) | Observed Speedup | Theoretical Linear
+-------------------------------------------------------
+    1 |  2.0869 |             2.65x |               1.00x
+    2 |  1.0064 |             5.50x |               2.00x
+    4 |  0.5180 |            10.69x |               4.00x
+    8 |  0.3833 |            14.45x |               8.00x
+   12 |  0.3463 |            15.99x |              12.00x
+   16 |  0.4181 |            13.25x |              16.00x
+
+======================================================================
+TASK 2: CACHE COHERENCE & FALSE SHARING - TRIAL 1
+COMMAND: python3 task2_falsesharing.py
+======================================================================
+Adjacent Indices (False Sharing): 0.8425s
+Padded Indices (Cache-Aligned): 0.8551s
+Slowdown Factor: 0.99x
+
+======================================================================
+TASK 2: CACHE COHERENCE & FALSE SHARING - TRIAL 2
+COMMAND: python3 task2_falsesharing.py
+======================================================================
+Adjacent Indices (False Sharing): 0.8248s
+Padded Indices (Cache-Aligned): 0.8628s
+Slowdown Factor: 0.96x
+
+======================================================================
+TASK 2: CACHE COHERENCE & FALSE SHARING - TRIAL 3
+COMMAND: python3 task2_falsesharing.py
+======================================================================
+Adjacent Indices (False Sharing): 0.8604s
+Padded Indices (Cache-Aligned): 0.8461s
+Slowdown Factor: 1.02x
+
+======================================================================
+TASK 3: SYNCHRONIZATION TAX (UNSAFE VS LOCKED)
+COMMAND: python3 task3_sync.py
+======================================================================
+Unsafe: Value = 2,000,000 / 2,000,000 | Time: 0.1137s
+Locked: Value = 2,000,000 / 2,000,000 | Time: 0.2758s
+Contention Cost Multiplier: 2.43x
+
+======================================================================
+TASK 3: ARCHITECTURAL REDESIGN (LOCKLESS ACCUMULATOR)
+COMMAND: python3 task3_lockless.py
+======================================================================
+=== TASK 3: ARCHITECTURAL REDESIGN BENCHMARK ===
+LockedCounter:     Value = 2,000,000 | Time: 0.2838s
+LocklessCounter:   Value = 2,000,000 | Time: 0.0904s
+Speedup Factor over LockedCounter: 3.14x
+Deterministic Correctness Check: PASSED (Exact 2,000,000)
+
+======================================================================
+TASK 4: ROOFLINE MODEL - COMPUTE VS MEMORY SATURATION
+COMMAND: python3 task4_roofline.py
+======================================================================
+=== Compute-Bound Suite (Register Math) ===
+Workers: 1 | Execution Time: 1.0610s
+Workers: 2 | Execution Time: 0.9108s
+Workers: 4 | Execution Time: 0.9106s
+
+=== Memory-Bound Suite (DRAM Bandwidth Saturation) ===
+Workers: 1 | Execution Time: 0.1411s
+Workers: 2 | Execution Time: 0.2766s
+Workers: 4 | Execution Time: 0.7453s
+
+======================================================================
+BONUS TASK: THREADING VS MULTIPROCESSING SCALING (1-32 WORKERS)
+COMMAND: python3 bonus_benchmark.py
+======================================================================
+=== Bonus Benchmark: threading.Thread vs multiprocessing.Pool ===
+Total work: 50,000,000 iterations
+
+Workers    | Threading Time (s)     | Multiprocessing Time (s) 
+-----------------------------------------------------------------
+1          | 2.4078                 | 2.9233                   
+2          | 2.6083                 | 1.3793                   
+4          | 2.6133                 | 0.7291                   
+8          | 2.7548                 | 0.4875                   
+16         | 2.7060                 | 0.4690                   
+32         | 2.6974                 | 0.4739                   
+
+Saved plot to /home/duklet/CSS_314/week3/bonus_empirical_curve.png

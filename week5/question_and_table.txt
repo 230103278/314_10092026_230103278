@@ -1,0 +1,54 @@
+Student name: Zhumagaliyev Daulet
+Student id: 230103278
+Hardware: AMD Ryzen 5 8645HS (6 cores / 12 threads, Zen 4, 6 MiB L2, 16 MiB L3)
+Date: 01.10.2026)
+
+==================================== TABLE 1 ====================================
+Benchmark                  | Threads   | Size / Samples   | Time (s) | Speedup | Eff. (%)
+---------------------------+-----------+------------------+----------+---------+---------
+Ch1: Monte Carlo           | 1         | 120,000,000      | 1.6421   | 1.00x   | 100.0
+Ch1: Monte Carlo           | 2         | 120,000,000      | 0.8079   | 2.03x   | 101.6
+Ch1: Monte Carlo           | 4         | 120,000,000      | 0.4121   | 3.98x   |  99.6
+Ch1: Monte Carlo           | 8         | 120,000,000      | 0.3101   | 5.29x   |  66.2
+Ch1: Monte Carlo           | Max (12)  | 120,000,000      | 0.2757   | 5.96x   |  49.6
+Ch2: Mandelbrot (Rows)     | Max (12)  | 2500 x 2500      | 0.761    | N/A     | N/A
+Ch2: Mandelbrot (Cols)     | Max (12)  | 2500 x 2500      | 0.761    | N/A     | N/A
+Ch3: Heat Stencil (f64)    | Max (12)  | 1500 x 1500 x 300| 0.587    | N/A     | N/A   (1149.36 Mcells/s)
+Ch3: Heat Stencil (f32)    | Max (12)  | 1500 x 1500 x 300| 0.065    | N/A     | N/A   (10438.78 Mcells/s)
+
+
+
+Challenge 1 Questions
+A:  1 thread 1.6421 s
+    12 threads = 0.2757 s  ->  speedup 5.96x, efficiency 49.6%
+
+B:  For the optimazation
+
+C:  No. Efficiency stays ~100% for 1 -> 2 -> 4 threads, then drops to 66% at 8 and 50% at 12 threads
+
+D:  Numba detects that inside_circle is updated with += inside prange and treats it as
+    a reduction variable. Each thread gets its own private copy initialised to 0, counts
+    into it without sharing, and at the end of the loop the private copies are summed into
+    the result.
+
+
+Challenge 2 Questions
+A:  Rows = 0.761 s, Cols = 0.761 s. Repeated runs were 0.745-0.764 s for both, so there is no winner.
+
+B:  NumPy arrays are C-contiguous (row-major): img[r, c] and img[r, c+1] are next to each
+    other in memory, and one 64-byte cache line holds 16 int32 pixels.
+
+C:  Rows near the top/bottom (cy close to +-1.2) are mostly outside the set and escape
+    after 2-3 iterations.
+
+D:  Attached: mandelbrot_output.png
+
+
+ Challenge 3 Questions
+A:  float64: 0.587 s, 1149.36 Megacells/s (see Table 1).
+
+B:  float32: 0.065 s, 10438.78 Megacells/s -> about 9x faster
+
+C:  My measurement (float64, 300 steps):
+    1 thr 0.915 s | 2 thr 0.584 s | 4 thr 0.538 s | 6 thr 0.540 s | 12 thr 0.562 s
+    After 2 threads there is no more speedup: the memory-bandwidth wall

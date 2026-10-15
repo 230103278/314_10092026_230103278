@@ -1,0 +1,13 @@
+{
+  "student_id": "230103278",
+  "student_name": "Daulet",
+  "gpu_name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "gpu_uuid": "GPU-7e64bde0-e356-849f-c800-b8e39d6f2c37",
+  "timestamp": "2026-10-15T10:15:45+00:00",
+  "files": {
+    "lab_kernels/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lab_kernels/module1_execution_model.py": "ea3cfb6bca0be817bbaa1126dd8d5a5ff52d35e925629f1d835c4cd173becded",
+    "lab_kernels/module2_memory_hierarchy.py": "2d54dbf5f075a89cc541b2907cfd70b9366ce43aa237a3799b2e1b45fc012488"
+  },
+  "signature": "62a4ae94388f76aeafbf047e039460d2aa85cb66ae6f51903554d533deb412e4"
+}
